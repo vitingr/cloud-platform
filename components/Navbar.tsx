@@ -18,7 +18,7 @@ const Navbar = () => {
         </h1>
       </Link>
 
-      <div className='flex list-none gap-12 w-full flex justify-center'>
+      <div className='flex list-none gap-12 w-full justify-center'>
         <li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Início</li>
         <li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Recursos</li>
         <li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Documentação</li>
@@ -30,10 +30,10 @@ const Navbar = () => {
         {session?.user ? (
           <>
           <img src={session?.user.image || ""} alt="Profile Image" className='h-[40px] rounded-full mr-6 cursor-pointer transition-all duration-300 hover:scale-110' />
-          <Button btnClass='w-[100px] cursor-pointer text-center p-2 bg-[#6C47FF] text-white font-bold rounded-xl transition-all duration-300 hover:bg-[#563cbd]' text='Logout' onClick={() => signOut()} />
+          <Button btnClass='w-[100px] cursor-pointer p-2 bg-[#6C47FF] text-white font-bold rounded-xl transition-all duration-300 hover:bg-[#563cbd] flex items-center justify-center' text='Logout' onClick={() => signOut()} />
           </>
         ) : (
-          <><Button btnClass='w-[100px] cursor-pointer text-center p-2 bg-[#6C47FF] text-white font-bold rounded-xl transition-all duration-300 hover:bg-[#563cbd]' text='Login' onClick={() => signIn()} /></>
+          <><Button btnClass='w-[100px] cursor-pointer p-2 bg-[#6C47FF] text-white font-bold rounded-xl transition-all duration-300 hover:bg-[#563cbd] flex items-center justify-center' text='Login' onClick={() => signIn()} /></>
         )}
       </div>
 
