@@ -9,3 +9,6 @@ export interface GoogleAuth {
   clientSecret: string;
 }
 
+export interface ArrayType {
+  map?: Function;
+}

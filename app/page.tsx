@@ -5,6 +5,7 @@ import Button from '@/components/Button'
 import { useSession } from 'next-auth/react'
 import { IoArrowForwardOutline, IoPlayCircleSharp } from 'react-icons/io5'
 import UploadFile from '@/components/common/UploadFile'
+import Link from 'next/link'
 
 export default function Home() {
 
@@ -47,7 +48,9 @@ export default function Home() {
         de dados
         </h1>
 
-        <UploadFile />
+        <Link href={"/dashboard"}>
+          Ir para o Dashboard
+        </Link>
 
       </div>
     </div>
