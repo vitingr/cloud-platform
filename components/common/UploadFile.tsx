@@ -4,8 +4,9 @@ import React, { ChangeEvent } from 'react'
 import { storage, app, database } from '@/database/firebase'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { addFile } from '@/utils/functions/firestore'
+import { useSession } from 'next-auth/react'
 
-const UploadFile = () => {
+const UploadFile = ({handleClick, folder} : {handleClick: () => void, folder: string}) => {
 
   const uploadFile = async (event: ChangeEvent<HTMLInputElement>) => {
     let file: any = event.target.files?.[0]
@@ -35,13 +36,14 @@ const UploadFile = () => {
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
               console.log('File available at', downloadURL);
-              addFile(downloadURL, file.name, "main")
+                addFile(downloadURL, file.name, folder)
+                handleClick()
             });
           }
         )
       }
     } catch (error) {
-      throw error
+      throw new Error("ERRO! Não foi possível enviar o arquivo")
     }
   }
 

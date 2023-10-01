@@ -10,6 +10,7 @@ import { onSnapshot } from 'firebase/firestore'
 import { database } from '@/database/firebase'
 import { collection, addDoc } from 'firebase/firestore'
 import { ArrayType } from '@/types'
+import { useSession } from 'next-auth/react'
 
 let files = collection(database, "files")
 
@@ -41,10 +42,14 @@ const page = () => {
 
     onSnapshot(files, (response) => {
       response.docs.forEach((item) => {
-        newFileList.push({ ...item.data(), id: item.id });
+        let value = { ...item.data() }
+        if (value.folder === "main") {
+          newFileList.push({ ...item.data(), id: item.id });
+        } else {
+          return
+        }
       });
       setFileList(newFileList)
-      // setFileList(JSON.stringify(newFileList));
     });
   }
 
@@ -72,7 +77,7 @@ const page = () => {
       <Files fileList={fileList} />
 
       <div className='mt-32'>
-        <UploadFile />
+        <UploadFile handleClick={getFiles} folder='main' />
       </div>
 
       {isCreateFolderVisible ? (

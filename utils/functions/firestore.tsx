@@ -19,7 +19,7 @@ export const addFile = async (imageLink: string, name: string, folder: string) =
 }
 
 export const addFolder = async (payload: {
-  folderName: string, isFolder: boolean, fileList: object, folder: string;
+  folderName: string, isFolder: boolean, fileList: object, folder: string
 }) => {
   try {
     addDoc(files, {
