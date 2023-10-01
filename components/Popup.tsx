@@ -10,7 +10,7 @@ const Popup = ({ children, show, title }: Popup) => {
         <div className='bg-white w-[450px] h-[400px] rounded-3xl p-10'>
           <div className='flex justify-between'>
             <h1 className='w-full text-center text-[#6C47FF] font-bold text-3xl mb-16'>{title || ""}</h1>
-            <IoCloseSharp size={25} className="cursor-pointer" />
+            <IoCloseSharp size={25} className="cursor-pointer" onClick={() => show(false)} />
           </div>
           <div>
             {children}

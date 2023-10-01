@@ -24,7 +24,8 @@ const page = () => {
       let payload = {
         folderName: folderName,
         isFolder: true,
-        fileList: []
+        fileList: [],
+        folder: "main"
       }
 
       addFolder(payload)

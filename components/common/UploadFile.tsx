@@ -35,7 +35,7 @@ const UploadFile = () => {
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
               console.log('File available at', downloadURL);
-              addFile(downloadURL, file.name)
+              addFile(downloadURL, file.name, "main")
             });
           }
         )
