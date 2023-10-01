@@ -12,3 +12,9 @@ export interface GoogleAuth {
 export interface ArrayType {
   map?: Function;
 }
+
+export interface Popup {
+  children: React.ReactNode;
+  show: boolean | any;
+  title: string;
+}

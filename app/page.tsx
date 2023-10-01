@@ -21,10 +21,12 @@ export default function Home() {
         <p className='mt-14 text-xl text-center max-w-[750px]'>Nossa Cloud não se trata somente de um sistema de nuvem comum. Use uma plataforma completa de armazenamento e gerenciamento de informações.</p>
 
         <div className='w-full flex justify-center items-center gap-20 mt-10'>
-          <div className='flex gap-3 items-center justify-center bg-[#6C47FF] pb-3 pt-3 pl-6 pr-6 rounded-xl text-white text-xl text-center cursor-pointer transition-all duration-300 hover:bg-[#563cbd]'>
-            Comece Aqui
-            <IoArrowForwardOutline size={20} className="icon-white" />
-          </div>
+          <Link href={"/dashboard"}>
+            <div className='flex gap-3 items-center justify-center bg-[#6C47FF] pb-3 pt-3 pl-6 pr-6 rounded-xl text-white text-xl text-center cursor-pointer transition-all duration-300 hover:bg-[#563cbd]'>
+              Comece Aqui
+              <IoArrowForwardOutline size={20} className="icon-white" />
+            </div>
+          </Link >
           <div className='flex gap-3 items-center justify-center'>
             <IoPlayCircleSharp size={50} className="icon-purple" />
             <div>
@@ -39,18 +41,14 @@ export default function Home() {
         <h1 className='max-w-[750px] w-full text-center font-bold text-5xl flex flex-wrap gap-3 justify-center'>
           Armazenando
           <span className="font-bold text-transparent text-5xl bg-clip-text bg-gradient-to-r from-[#6C47FF] to-[#17CCFC]">
-          10.000 + 
-        </span>
+            10.000 +
+          </span>
           de arquivos e
           <span className="font-bold text-transparent text-5xl bg-clip-text bg-gradient-to-r from-[#6C47FF] to-[#17CCFC]">
-          milhões
-        </span>
-        de dados
+            milhões
+          </span>
+          de dados
         </h1>
-
-        <Link href={"/dashboard"}>
-          Ir para o Dashboard
-        </Link>
 
       </div>
     </div>

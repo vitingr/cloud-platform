@@ -1,7 +1,6 @@
 "use client"
 
-import React, { ChangeEvent, useState } from 'react'
-import Button from '../Button'
+import React, { ChangeEvent } from 'react'
 import { storage, app, database } from '@/database/firebase'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { addFile } from '@/utils/functions/firestore'
