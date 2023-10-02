@@ -2,15 +2,15 @@
 
 import Link from 'next/link';
 import React, { useState } from 'react'
-import { IoDocumentText, IoEllipsisVerticalSharp, IoFolderSharp, IoShareSocial, IoPencil, IoCloudDownloadSharp, IoCopy } from 'react-icons/io5'
+import { IoDocumentText, IoEllipsisVerticalSharp, IoFolderSharp, IoShareSocial, IoPencil, IoCloudDownloadSharp, IoCopy, IoTrashBin, IoInformationCircleOutline } from 'react-icons/io5'
 import Popup from '../Popup';
 import ToastMessage from '../config/ToastMessage'
 import { toast } from 'react-toastify'
 import { database } from '@/database/firebase'
-import { collection, doc } from 'firebase/firestore'
+import { collection, doc, setDoc } from 'firebase/firestore'
 import { ArrayType } from '@/types'
 
-const Files = ({ fileList }: any) => {
+const Files = ({ fileList, getFiles }: any) => {
 
   const [showFileInfo, setShowFileInfo] = useState<boolean>(false)
   const [currentFile, setCurrentFile] = useState<any>([])
@@ -20,6 +20,7 @@ const Files = ({ fileList }: any) => {
 
   const chooseFile = async (item: any) => {
     setCurrentFile(item)
+    setNewFileName(item.name)
     setShowFileInfo(true)
   }
 
@@ -35,15 +36,20 @@ const Files = ({ fileList }: any) => {
   
   const editFile = async (id: string, newName: string) => {
     if (newFileName !== "") {
-      const collectionRef: any = collection(database, "files")
-      const documentRef = collectionRef.doc(id).update({
-        name: newName
-      }).then(() => {
-        toast.success("Arquivo alterado com sucesso!")
-      }).catch((error: string) => {
-        console.log(error)
-        toast.error("Não foi possível editar o arquivo.")
-      })
+      try {
+        const documentRef = await setDoc(doc(database, "files", id), {
+          folder: currentFile.folder,
+          imageLink: currentFile.imageLink,
+          isFolder: currentFile.isFolder,
+          name: newName
+        }).then(() => {
+          toast.success("Arquivo alterado com sucesso.")
+          getFiles()
+          setShowFileInfo(false)
+        })
+      } catch (error) {
+        toast.error("Não foi possível salvar as alterações.")
+      }
     } else {
       toast.error("Digite um nome válido.")
     }
@@ -60,7 +66,7 @@ const Files = ({ fileList }: any) => {
         isFolder: boolean;
         fileList: object;
       }) => (
-        <div>
+        <div key={item.id}>
           {item.isFolder ? (
             <Link href={`/dashboard/${item.id}`} key={item.id}>
               <div className='p-2 bg-[#e2e7ec] rounded-xl w-[200px] cursor-pointer' key={item.id}>
@@ -82,27 +88,27 @@ const Files = ({ fileList }: any) => {
                     <div className='w-full p-12 flex items-center justify-center'>
                       <img src={currentFile.imageLink} alt="Image" className='max-w-[550px] max-h-[750px]' />
                     </div>
-                    <div className='w-[400px] flex flex-col gap-4 pl-6 border-l border-neutral-200 overflow-hidden'>
-                      <li onClick={() => setShareLink(!shareLink)} className='list-none flex items-center gap-2 border-b border-neutral-200 pb-2 cursor-pointer'><IoShareSocial size={17.5} />Compartilhar</li>
+                    <div className='w-[400px] flex flex-col pl-6 border-l border-neutral-200 overflow-hidden'>
+                      <li onClick={() => setShareLink(!shareLink)} className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoShareSocial size={17.5} />Compartilhar</li>
                       {shareLink ? (
-                        <div className='w-full flex items-center gap-4 mb-10'>
+                        <div className='w-full flex items-center gap-4 mb-8 mt-3'>
                           <p className='w-full overflow-hidden'>https://cloudify.com/archive=kwodjwkdwjaodw</p>
                           <IoCopy size={17.5} className="cursor-pointer transition-all duration-300 hover:scale-105" onClick={() => handleCopy(currentFile)} />
                         </div>
                       ) : (<></>)}
-                      <li className='list-none flex items-center gap-2 border-b border-neutral-200 pb-2 cursor-pointer' onClick={() => setRename(!rename)}><IoPencil size={17.5} />Renomear</li>
+                      <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100' onClick={() => setRename(!rename)}><IoPencil size={17.5} />Renomear</li>
                       {rename ? (
                         <form onSubmit={(e: React.SyntheticEvent) => {
                           e.preventDefault()
                           editFile(currentFile.id, newFileName)
-                        }} className='w-full flex items-center gap-4 mb-10'>
-                          <input type="text" name="rename" id="rename" className='w-full outline-none border-b border-neutral-500 transition-all duration-300 p-1 bg-transparent focus:border-[#6C47FF] text-sm' maxLength={40} minLength={1} onChange={(e) => setNewFileName(e.target.value)} placeholder='Digite um nome para o arquivo' />
+                        }} className='w-full flex items-center gap-3 mb-10'>
+                          <input type="text" name="rename" id="rename" className='w-full outline-none border-b border-neutral-500 transition-all duration-300 p-1 bg-transparent focus:border-[#6C47FF] text-sm mt-4' maxLength={40} minLength={1} onChange={(e) => setNewFileName(e.target.value)} placeholder='Digite um nome para o arquivo' value={newFileName} />
                           <button type='submit' className='pl-2 pr-2 pt-1 pb-1 rounded-lg text-white bg-[#6C47FF] transition-all duration-300 hover:bg-[#563cbd]'>Alterar</button>
                         </form>
                       ) : (<></>)}
-                      <li className='list-none flex items-center gap-2 border-b border-neutral-200 pb-2 cursor-pointer'><IoCloudDownloadSharp size={17.5} />Download</li>
-                      <li className='list-none flex items-center gap-2 border-b border-neutral-200 pb-2 cursor-pointer'><IoShareSocial size={17.5} />Compartilhar</li>
-                      <li className='list-none flex items-center gap-2 border-b border-neutral-200 pb-2 cursor-pointer'><IoShareSocial size={17.5} />Compartilhar</li>
+                      <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoCloudDownloadSharp size={17.5} />Download</li>
+                      <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoInformationCircleOutline size={17.5} />Informações Detalhadas</li>
+                      <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoTrashBin size={17.5} />Deletar Arquivo</li>
                     </div>
                   </div>
                 </Popup>

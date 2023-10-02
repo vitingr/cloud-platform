@@ -76,7 +76,7 @@ const page = () => {
         <input type="text" name="search" id="search" placeholder='Buscar um arquivo específico' className='w-full flex items-center outline-none bg-transparent text-neutral-500' />
       </div>
 
-      <Files fileList={fileList} />
+      <Files fileList={fileList} getFiles={getFiles} />
 
       <div className='mt-32'>
         <UploadFile handleClick={getFiles} folder='main' />

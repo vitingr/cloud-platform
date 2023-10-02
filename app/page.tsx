@@ -1,15 +1,10 @@
 "use client"
 
-import Image from 'next/image'
-import Button from '@/components/Button'
 import { useSession } from 'next-auth/react'
 import { IoArrowForwardOutline, IoPlayCircleSharp } from 'react-icons/io5'
-import UploadFile from '@/components/common/UploadFile'
 import Link from 'next/link'
 
 export default function Home() {
-
-  const { data: session } = useSession()
 
   return (
     <div className='w-full p-[5%] flex flex-col items-center'>
