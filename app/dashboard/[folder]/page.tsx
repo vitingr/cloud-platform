@@ -3,15 +3,16 @@
 import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { addFolder } from '@/utils/functions/firestore'
-import { onSnapshot, query, where } from 'firebase/firestore'
 import { database } from '@/database/firebase'
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, onSnapshot } from 'firebase/firestore'
 import { ArrayType } from '@/types'
 import { IoAddOutline, IoSearch, IoArrowBackSharp } from 'react-icons/io5'
 import Files from '@/components/common/Files'
 import UploadFile from '@/components/common/UploadFile'
 import Popup from '@/components/Popup'
 import Link from 'next/link'
+import ToastMessage from '@/components/config/ToastMessage'
+import { toast } from 'react-toastify'
 
 let files = collection(database, "files")
 
@@ -54,6 +55,7 @@ const page = () => {
       addFolder(payload)
       setCreateFolderVisible(false)
       getFiles()
+      toast.success("Sucesso! A pasta foi criada.")
     }
   }
 
@@ -63,6 +65,7 @@ const page = () => {
 
   return (
     <div className='w-full flex flex-col p-[5%] max-w-[1600px]'>
+      <ToastMessage />
       <div className='w-full flex justify-around'>
         <h1 className='w-full font-bold text-4xl'>Seus arquivos</h1>
         <div className='w-full flex justify-end '>
@@ -92,7 +95,7 @@ const page = () => {
 
       {
     isCreateFolderVisible ? (
-      <Popup title='Adicionar Pasta' show={setCreateFolderVisible}>
+      <Popup title='Adicionar Pasta' show={setCreateFolderVisible} width='w-[450px]' height='w-[650px]' >
         <form onSubmit={(e: React.SyntheticEvent) => {
           e.preventDefault()
           createFolder()

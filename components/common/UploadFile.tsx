@@ -4,7 +4,8 @@ import React, { ChangeEvent } from 'react'
 import { storage, app, database } from '@/database/firebase'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { addFile } from '@/utils/functions/firestore'
-import { useSession } from 'next-auth/react'
+import ToastMessage from '../config/ToastMessage'
+import { toast } from 'react-toastify'
 
 const UploadFile = ({handleClick, folder} : {handleClick: () => void, folder: string}) => {
 
@@ -38,6 +39,7 @@ const UploadFile = ({handleClick, folder} : {handleClick: () => void, folder: st
               console.log('File available at', downloadURL);
                 addFile(downloadURL, file.name, folder)
                 handleClick()
+                toast.success("Arquivo adicionado com sucesso!")
             });
           }
         )
@@ -49,6 +51,7 @@ const UploadFile = ({handleClick, folder} : {handleClick: () => void, folder: st
 
   return (
     <div>
+      <ToastMessage />
       <label htmlFor="file">
         <button className="cta">
           <span>Adicionar Arquivo</span>

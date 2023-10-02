@@ -17,4 +17,6 @@ export interface Popup {
   children: React.ReactNode;
   show: boolean | any;
   title: string;
+  width: string;
+  height: string;
 }
