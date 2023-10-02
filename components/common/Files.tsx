@@ -7,8 +7,7 @@ import Popup from '../Popup';
 import ToastMessage from '../config/ToastMessage'
 import { toast } from 'react-toastify'
 import { database } from '@/database/firebase'
-import { collection, doc, setDoc } from 'firebase/firestore'
-import { ArrayType } from '@/types'
+import { doc, setDoc, deleteDoc } from 'firebase/firestore'
 
 const Files = ({ fileList, getFiles }: any) => {
 
@@ -52,6 +51,16 @@ const Files = ({ fileList, getFiles }: any) => {
       }
     } else {
       toast.error("Digite um nome válido.")
+    }
+  }
+
+  const removeFile = async (id: string) => {
+    if (id) {
+      await deleteDoc(doc(database, "files", id));
+
+      await getFiles()
+      setShowFileInfo(false)
+      toast.success("Arquivo removido com sucesso!")
     }
   }
 
@@ -108,7 +117,7 @@ const Files = ({ fileList, getFiles }: any) => {
                       ) : (<></>)}
                       <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoCloudDownloadSharp size={17.5} />Download</li>
                       <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoInformationCircleOutline size={17.5} />Informações Detalhadas</li>
-                      <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoTrashBin size={17.5} />Deletar Arquivo</li>
+                      <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100' onClick={() => removeFile(currentFile.id)}><IoTrashBin size={17.5} />Deletar Arquivo</li>
                     </div>
                   </div>
                 </Popup>

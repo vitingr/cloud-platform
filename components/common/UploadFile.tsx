@@ -7,7 +7,7 @@ import { addFile } from '@/utils/functions/firestore'
 import ToastMessage from '../config/ToastMessage'
 import { toast } from 'react-toastify'
 
-const UploadFile = ({handleClick, folder} : {handleClick: () => void, folder: string}) => {
+const UploadFile = ({ handleClick, folder }: { handleClick: () => void, folder: string }) => {
 
   const uploadFile = async (event: ChangeEvent<HTMLInputElement>) => {
     let file: any = event.target.files?.[0]
@@ -37,9 +37,9 @@ const UploadFile = ({handleClick, folder} : {handleClick: () => void, folder: st
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
               console.log('File available at', downloadURL);
-                addFile(downloadURL, file.name, folder)
-                handleClick()
-                toast.success("Arquivo adicionado com sucesso!")
+              addFile(downloadURL, file.name, folder)
+              handleClick()
+              toast.success("Arquivo adicionado com sucesso!")
             });
           }
         )
@@ -53,6 +53,7 @@ const UploadFile = ({handleClick, folder} : {handleClick: () => void, folder: st
     <div>
       <ToastMessage />
       <label htmlFor="file">
+        <input type="file" name="file" id="file" onChange={(event) => uploadFile(event)} className='hidden z-40 opacity-0 absolute' />
         <button className="cta">
           <span>Adicionar Arquivo</span>
           <svg viewBox="0 0 13 10" height="10px" width="15px">
@@ -60,7 +61,6 @@ const UploadFile = ({handleClick, folder} : {handleClick: () => void, folder: st
             <polyline points="8 1 12 5 8 9"></polyline>
           </svg>
         </button>
-        <input type="file" name="file" id="file" onChange={(event) => uploadFile(event)} className='hidden z-40 opacity-0 absolute' />
       </label>
     </div>
   )
