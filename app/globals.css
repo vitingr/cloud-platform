@@ -151,5 +151,29 @@ html {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   border-radius: 10px;
-  box-shadow: 0 0px 32px 0 rgba(31, 38, 135, 0.37); 
+  box-shadow: 0 0px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.custom-shape-divider-top-1696300465 {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1696300465 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 150px;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-top-1696300465 .shape-fill {
+  fill: #0C0129;
 }

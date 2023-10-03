@@ -29,6 +29,7 @@ const Files = ({ fileList, getFiles }: any) => {
     setCopied(file.imageLink)
     navigator.clipboard.writeText(file.imageLink)
     setTimeout(() => setCopied(""), 3000)
+    toast.success("Link Copiado para a Área de Transferências")
   }
 
   const [newFileName, setNewFileName] = useState<string>("")
@@ -130,8 +131,8 @@ const Files = ({ fileList, getFiles }: any) => {
                   <h1 className='w-full max-w-[133px] overflow-hidden'>{item.name || item.folderName}</h1>
                   <IoEllipsisVerticalSharp size={20} className="cursor-pointer" />
                 </div>
-                <div className='h-[200px] flex justify-center items-center'>
-                  <img src={item.imageLink} alt="File Photo" className='w-full h-[200px] rounded-xl' />
+                <div className='h-[200px] flex justify-center items-center p-1'>
+                  <img src={item.imageLink} alt="File Photo" className='w-full max-h-[200px] rounded-xl' />
                 </div>
               </div>
             </>
