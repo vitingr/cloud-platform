@@ -177,3 +177,7 @@ html {
 .custom-shape-divider-top-1696300465 .shape-fill {
   fill: #0C0129;
 }
+
+.gradient-main {
+  background: linear-gradient(to bottom right, #E8E4FF 0%, white 40%, #E8E4FF 100%);
+}

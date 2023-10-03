@@ -29,8 +29,10 @@ const Navbar = () => {
       <div className='w-full flex justify-start'>
         {session?.user ? (
           <>
-          <img src={session?.user.image || ""} alt="Profile Image" className='h-[35px] rounded-full mr-6 cursor-pointer transition-all duration-300 hover:scale-110' />
-          <Button btnClass='w-[75px] h-[35px] cursor-pointer bg-white text-[#6C47FF] border border-[#6C47FF] rounded-xl transition-all duration-500 hover:bg-[#563cbd] hover:text-white flex items-center justify-center' text='Logout' onClick={() => signOut()} />
+            <Link href="/dashboard">
+              <img src={session?.user.image || ""} alt="Profile Image" className='h-[35px] rounded-full mr-6 cursor-pointer transition-all duration-300 hover:scale-110' />
+            </Link>
+            <Button btnClass='w-[75px] h-[35px] cursor-pointer bg-white text-[#6C47FF] border border-[#6C47FF] rounded-xl transition-all duration-500 hover:bg-[#563cbd] hover:text-white flex items-center justify-center' text='Logout' onClick={() => signOut()} />
           </>
         ) : (
           <><Button btnClass='w-[100px] h-[35px] cursor-pointer p-2 bg-[#6C47FF] text-white font-bold rounded-xl transition-all duration-300 hover:bg-[#563cbd] flex items-center justify-center' text='Login' onClick={() => signIn()} /></>
