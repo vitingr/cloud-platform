@@ -8,26 +8,30 @@ import Popup from '@/components/Popup'
 import { addFolder } from '@/utils/functions/firestore'
 import { onSnapshot } from 'firebase/firestore'
 import { database } from '@/database/firebase'
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc, query, orderBy } from 'firebase/firestore'
 import { ArrayType } from '@/types'
 import ToastMessage from '@/components/config/ToastMessage'
 import { toast } from 'react-toastify'
+import { useSession } from 'next-auth/react'
 
 let files = collection(database, "files")
 
 const page = () => {
+
+  const { data: session, status } = useSession()
 
   const [isCreateFolderVisible, setCreateFolderVisible] = useState<boolean>(false)
   const [folderName, setFolderName] = useState<string>("")
   const [description, setDescription] = useState<string>("")
 
   const createFolder = async () => {
-    if (folderName !== "" && description !== "") {
+    if (folderName !== "" && description !== "" && session != undefined && status === "authenticated") {
       let payload = {
         folderName: folderName,
         isFolder: true,
         fileList: [],
-        folder: "main"
+        folder: "main",
+        creator: session?.user?.email
       }
 
       addFolder(payload)
@@ -42,17 +46,21 @@ const page = () => {
   const getFiles = async () => {
     const newFileList: any = [];
 
-    onSnapshot(files, (response) => {
-      response.docs.forEach((item) => {
-        let value = { ...item.data() }
-        if (value.folder === "main") {
-          newFileList.push({ ...item.data(), id: item.id });
-        } else {
-          return
-        }
+    const queryFiles = query(files, orderBy("isFolder", "desc"))
+
+    if (session != undefined && status === "authenticated") {
+      onSnapshot(queryFiles, (response) => {
+        response.docs.forEach((item) => {
+          let value = { ...item.data() }
+          if (value.folder === "main" && value.creator === session?.user?.email) {
+            newFileList.push({ ...item.data(), id: item.id });
+          } else {
+            return
+          }
+        });
+        setFileList(newFileList)
       });
-      setFileList(newFileList)
-    });
+    }
   }
 
   useEffect(() => {

@@ -6,14 +6,17 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { addFile } from '@/utils/functions/firestore'
 import ToastMessage from '../config/ToastMessage'
 import { toast } from 'react-toastify'
+import { useSession } from 'next-auth/react'
 
 const UploadFile = ({ handleClick, folder }: { handleClick: () => void, folder: string }) => {
+
+  const {data: session, status} = useSession()
 
   const uploadFile = async (event: ChangeEvent<HTMLInputElement>) => {
     let file: any = event.target.files?.[0]
 
     try {
-      if (file) {
+      if (file && session != undefined && status === "authenticated") {
         const storageRef = ref(storage, `files/${file.name}`)
         const uploadTask = uploadBytesResumable(storageRef, file)
 
@@ -36,8 +39,7 @@ const UploadFile = ({ handleClick, folder }: { handleClick: () => void, folder: 
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-              console.log('File available at', downloadURL);
-              addFile(downloadURL, file.name, folder)
+              addFile(downloadURL, file.name, folder, session?.user?.email)
               handleClick()
               toast.success("Arquivo adicionado com sucesso!")
             });

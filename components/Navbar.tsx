@@ -1,14 +1,70 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { text } from 'stream/consumers'
 import Button from './Button'
+import { addUser } from '@/utils/functions/firestore'
+import { collection, onSnapshot } from 'firebase/firestore'
+import { database } from '@/database/firebase'
+
+let users = collection(database, "users")
 
 const Navbar = () => {
 
-  const { data: session } = useSession()
+  const [user, setUser] = useState<any>([])
+  const [validation, setValidation] = useState<boolean>(false)
+  const { data: session, status } = useSession()
+
+  const getUser = async () => {
+    const userData: any = [];
+    try {
+      onSnapshot(users, (response) => {
+        response.docs.forEach((item) => {
+          let value = { ...item.data() }
+          console.log(`actual email: ${value.email} | user: ${session?.user?.email}`)
+          if (value.email === session?.user?.email) {
+            userData.push({ ...item.data(), id: item.id });
+          }
+        });
+        setUser(userData)
+        setValidation(true)
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const checkUser = async () => {
+    try {
+      if (user.length === 0) {
+        let userInfo: any = {
+          name: session?.user?.name,
+          email: session?.user?.email,
+          image: session?.user?.image
+        }
+        addUser(userInfo)
+      }
+    } catch (error) {
+      throw new Error("Erro ao verificar o usuário")
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (session != undefined && status === "authenticated") {
+        try {
+          await getUser()
+          if (validation === true) {
+            await checkUser()
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }
+    fetchData()
+  }, [session])
 
   return (
     <nav className='w-full min-h-[75px] flex items-center justify-around p-10 gap-20'>
