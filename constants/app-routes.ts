@@ -3,6 +3,7 @@ export const APP_ROUTES = {
       usuario: "/dashboard"
   },
   public: {
-      login: "/"
+      login: "/",
+      share: "/share"
   }
 }

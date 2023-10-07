@@ -18,7 +18,6 @@ import { useSession } from 'next-auth/react'
 let files = collection(database, "files")
 
 const page = () => {
-
   const { data: session, status } = useSession()
 
   const pathname = usePathname().split("/")

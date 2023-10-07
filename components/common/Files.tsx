@@ -6,8 +6,10 @@ import { IoDocumentText, IoEllipsisVerticalSharp, IoFolderSharp, IoShareSocial, 
 import Popup from '../Popup';
 import ToastMessage from '../config/ToastMessage'
 import { toast } from 'react-toastify'
-import { database } from '@/database/firebase'
+import { database, storage } from '@/database/firebase'
 import { doc, setDoc, deleteDoc } from 'firebase/firestore'
+import { getDownloadURL, ref } from 'firebase/storage';
+import { saveAs } from 'file-saver';
 
 const Files = ({ fileList, getFiles }: any) => {
 
@@ -18,17 +20,23 @@ const Files = ({ fileList, getFiles }: any) => {
   const [rename, setRename] = useState<boolean>(false)
 
   const chooseFile = async (item: any) => {
+
     setCurrentFile(item)
     setNewFileName(item.name)
+    
     setShowFileInfo(true)
+    
   }
 
   const [copied, setCopied] = useState("")
 
   const handleCopy = (file: any) => {
-    setCopied(file.imageLink)
-    navigator.clipboard.writeText(file.imageLink)
+
+    setCopied(`/localhost:3000/share/${file.id}`)
+    navigator.clipboard.writeText(`/localhost:3000/share/${file.id}`)
+
     setTimeout(() => setCopied(""), 3000)
+
     toast.success("Link Copiado para a Área de Transferências")
   }
 
@@ -37,15 +45,21 @@ const Files = ({ fileList, getFiles }: any) => {
   const editFile = async (id: string, newName: string) => {
     if (newFileName !== "") {
       try {
+        
         const documentRef = await setDoc(doc(database, "files", id), {
+
           folder: currentFile.folder,
           imageLink: currentFile.imageLink,
           isFolder: currentFile.isFolder,
           name: newName
+
         }).then(() => {
+
           toast.success("Arquivo alterado com sucesso.")
+
           getFiles()
           setShowFileInfo(false)
+
         })
       } catch (error) {
         toast.error("Não foi possível salvar as alterações.")
@@ -57,11 +71,30 @@ const Files = ({ fileList, getFiles }: any) => {
 
   const removeFile = async (id: string) => {
     if (id) {
-      await deleteDoc(doc(database, "files", id));
 
+      await deleteDoc(doc(database, "files", id));
       await getFiles()
+
       setShowFileInfo(false)
+
       toast.success("Arquivo removido com sucesso!")
+    }
+  }
+
+  const downloadFile = async (file: string) => {
+    console.log(file)
+
+    try {
+
+      const url = await getDownloadURL(ref(storage, `files/${file}`))
+
+      const response = await fetch(url);
+      const blob = await response.blob();
+  
+      saveAs(blob, file);
+
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -76,7 +109,7 @@ const Files = ({ fileList, getFiles }: any) => {
         isFolder: boolean;
         fileList: object;
       }) => (
-        <>
+        <div key={item.id}>
           {showFileInfo ? (
             <Popup show={setShowFileInfo} title='Informações Arquivo' width="max-w-[1050px]" height="max-h-[950px]">
               <div className='w-full flex justify-between'>
@@ -91,7 +124,7 @@ const Files = ({ fileList, getFiles }: any) => {
                   )}
                   {shareLink ? (
                     <div className='w-full flex items-center gap-4 mb-8 mt-3'>
-                      <p className='w-full overflow-hidden'>https://cloudify.com/archive=kwodjwkdwjaodw</p>
+                      <p className='w-full overflow-hidden'>https://localhost:3000/share{currentFile.id}</p>
                       <IoCopy size={17.5} className="cursor-pointer transition-all duration-300 hover:scale-105" onClick={() => handleCopy(currentFile)} />
                     </div>
                   ) : (<></>)}
@@ -108,7 +141,7 @@ const Files = ({ fileList, getFiles }: any) => {
                   {currentFile.isFolder ? (
                     <></>
                   ) : (
-                    <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoCloudDownloadSharp size={17.5} />Download</li>
+                    <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100' onClick={() => downloadFile(currentFile.name)}><IoCloudDownloadSharp size={17.5} />Download</li>
                   )}
                   <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoInformationCircleOutline size={17.5} />Informações Detalhadas</li>
                   <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100' onClick={() => removeFile(currentFile.id)}><IoTrashBin size={17.5} />Deletar Arquivo</li>
@@ -118,7 +151,7 @@ const Files = ({ fileList, getFiles }: any) => {
           ) : (
             <></>
           )}
-          <div key={item.id}>
+          <div>
             {item.isFolder ? (
               <div className='p-2 bg-[#e2e7ec] rounded-xl w-[200px] cursor-pointer' key={item.id}>
                 <div className='h-[30px] w-full flex justify-between p-1 gap-2 overflow-hidden'>
@@ -147,7 +180,7 @@ const Files = ({ fileList, getFiles }: any) => {
               </>
             )}
           </div>
-        </>
+        </div>
       ))}
     </div>
   )

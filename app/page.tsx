@@ -6,7 +6,6 @@ import Link from 'next/link'
 import Button from '@/components/Button'
 
 export default function Home() {
-
   return (
     <div className='w-full flex flex-col items-center'>
       <section className='w-full max-w-[1200px] flex flex-col items-center p-[5%]'>

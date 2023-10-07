@@ -37,6 +37,7 @@ const page = () => {
       addFolder(payload)
       setCreateFolderVisible(false)
       getFiles()
+      
       toast.success("Sucesso! A pasta foi criada.")
     }
   }

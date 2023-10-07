@@ -22,7 +22,6 @@ const Navbar = () => {
       onSnapshot(users, (response) => {
         response.docs.forEach((item) => {
           let value = { ...item.data() }
-          console.log(`actual email: ${value.email} | user: ${session?.user?.email}`)
           if (value.email === session?.user?.email) {
             userData.push({ ...item.data(), id: item.id });
           }
@@ -59,7 +58,7 @@ const Navbar = () => {
             await checkUser()
           }
         } catch (error) {
-          console.log(error)
+          throw new Error("Erro! não foi possível autenticar o usuário")
         }
       }
     }
@@ -75,18 +74,18 @@ const Navbar = () => {
       </Link>
 
       <div className='flex list-none gap-12 w-full justify-center'>
-        <li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Início</li>
-        <li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Recursos</li>
-        <li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Documentação</li>
-        <li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Preço</li>
-        <li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Desenvolvedor</li>
+        <Link href={"/"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Início</li></Link>
+        <Link href={"/dashboard"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Dashboard</li></Link>
+        <Link href={"/"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Recursos</li></Link>
+        <Link href={"/"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Documentação</li></Link>
+        <Link href={"/"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Sobre</li></Link>
       </div>
 
       <div className='w-full flex justify-start'>
         {session?.user ? (
           <>
             <Link href="/dashboard">
-              <img src={session?.user.image || ""} alt="Profile Image" className='h-[35px] rounded-full mr-6 cursor-pointer transition-all duration-300 hover:scale-110' />
+              <img src={session?.user?.image || ""} alt="Profile Image" className='h-[35px] rounded-full mr-6 cursor-pointer transition-all duration-300 hover:scale-110' />
             </Link>
             <Button btnClass='w-[75px] h-[35px] cursor-pointer bg-white text-[#6C47FF] border border-[#6C47FF] rounded-xl transition-all duration-500 hover:bg-[#563cbd] hover:text-white flex items-center justify-center' text='Logout' onClick={() => signOut()} />
           </>
