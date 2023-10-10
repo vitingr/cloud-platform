@@ -5,7 +5,7 @@ import { IoCloseSharp } from 'react-icons/io5'
 const Popup = ({ children, show, title, width, height }: Popup) => {
 
   return (
-    <div className='fixed w-full h-full left-0 top-0 z-50'>
+    <div className='fixed w-full h-full left-0 top-0 z-50 bg-white'>
       <div className='glassmorphism'>
         <div className={`bg-white ${height} ${width} rounded-3xl p-10`}>
           <div className='flex justify-between'>

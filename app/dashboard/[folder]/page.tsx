@@ -32,7 +32,7 @@ const page = () => {
   const getFiles = async () => {
     const newFileList: any = [];
 
-    if (session != undefined && status === "authenticated") {
+    if (session?.user?.email != undefined && status === "authenticated") {
       onSnapshot(files, (response) => {
         response.docs.forEach((item) => {
           let value = { ...item.data() }

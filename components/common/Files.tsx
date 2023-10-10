@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import React, { useState } from 'react'
-import { IoDocumentText, IoEllipsisVerticalSharp, IoFolderSharp, IoShareSocial, IoPencil, IoCloudDownloadSharp, IoCopy, IoTrashBin, IoInformationCircleOutline } from 'react-icons/io5'
+import { IoDocumentText, IoEllipsisVerticalSharp, IoFolderSharp, IoShareSocial, IoPencil, IoCloudDownloadSharp, IoCopy, IoTrashBin, IoInformationCircleOutline, IoHeartOutline } from 'react-icons/io5'
 import Popup from '../Popup';
 import ToastMessage from '../config/ToastMessage'
 import { toast } from 'react-toastify'
@@ -23,9 +23,9 @@ const Files = ({ fileList, getFiles }: any) => {
 
     setCurrentFile(item)
     setNewFileName(item.name)
-    
+
     setShowFileInfo(true)
-    
+
   }
 
   const [copied, setCopied] = useState("")
@@ -45,7 +45,7 @@ const Files = ({ fileList, getFiles }: any) => {
   const editFile = async (id: string, newName: string) => {
     if (newFileName !== "") {
       try {
-        
+
         const documentRef = await setDoc(doc(database, "files", id), {
 
           folder: currentFile.folder,
@@ -55,9 +55,10 @@ const Files = ({ fileList, getFiles }: any) => {
 
         }).then(() => {
 
+          getFiles()
+
           toast.success("Arquivo alterado com sucesso.")
 
-          getFiles()
           setShowFileInfo(false)
 
         })
@@ -72,7 +73,7 @@ const Files = ({ fileList, getFiles }: any) => {
   const removeFile = async (id: string) => {
     if (id) {
 
-      await deleteDoc(doc(database, "files", id));
+      deleteDoc(doc(database, "files", id));
       await getFiles()
 
       setShowFileInfo(false)
@@ -82,7 +83,6 @@ const Files = ({ fileList, getFiles }: any) => {
   }
 
   const downloadFile = async (file: string) => {
-    console.log(file)
 
     try {
 
@@ -90,7 +90,7 @@ const Files = ({ fileList, getFiles }: any) => {
 
       const response = await fetch(url);
       const blob = await response.blob();
-  
+
       saveAs(blob, file);
 
     } catch (error) {
@@ -108,13 +108,29 @@ const Files = ({ fileList, getFiles }: any) => {
         folderName: string;
         isFolder: boolean;
         fileList: object;
+        fileType: string;
       }) => (
         <div key={item.id}>
           {showFileInfo ? (
             <Popup show={setShowFileInfo} title='Informações Arquivo' width="max-w-[1050px]" height="max-h-[950px]">
               <div className='w-full flex justify-between'>
                 <div className='w-full p-12 flex items-center justify-center'>
-                  <img src={currentFile.imageLink || "https://cdn-icons-png.flaticon.com/512/4192/4192685.png"} alt="Image" className='max-w-[450px] max-h-[550px] cursor-grab' />
+                  {currentFile.isFolder === true ? (
+                    <img src={"https://cdn-icons-png.flaticon.com/512/4192/4192685.png"} alt="Image" className='max-w-[450px] max-h-[550px] cursor-grab' />
+                  ) : (
+                    <>
+                      {currentFile.fileType === "img" ? (
+                        <img src={currentFile.imageLink} alt="Image" className='max-w-[450px] max-h-[550px] cursor-grab' />
+                      ) : (
+                        <>
+                          {currentFile.fileType === "pdf" ? (<img src={"https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"} alt="Image" className='max-w-[450px] max-h-[550px] cursor-grab' />) : (<></>)}
+                          {currentFile.fileType === "word" ? (<img src={"https://1000logos.net/wp-content/uploads/2020/08/Microsoft-Word-Logo.png"} alt="Image" className='max-w-[450px] max-h-[550px] cursor-grab' />) : (<></>)}
+                          {currentFile.fileType === "excel" ? (<img src={"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/826px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png"} alt="Image" className='max-w-[450px] max-h-[550px] cursor-grab' />) : (<></>)}
+                          {currentFile.fileType === "powerpoint" ? (<img src={"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Microsoft_Office_PowerPoint_%282019%E2%80%93present%29.svg/512px-Microsoft_Office_PowerPoint_%282019%E2%80%93present%29.svg.png?20210821050414"} alt="Image" className='max-w-[450px] max-h-[550px] cursor-grab' />) : (<></>)}
+                        </>
+                      )}
+                    </>
+                  )}
                 </div>
                 <div className='w-[525px] flex flex-col pl-6 border-l border-neutral-200 overflow-hidden'>
                   {currentFile.isFolder ? (
@@ -143,6 +159,7 @@ const Files = ({ fileList, getFiles }: any) => {
                   ) : (
                     <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100' onClick={() => downloadFile(currentFile.name)}><IoCloudDownloadSharp size={17.5} />Download</li>
                   )}
+                  <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoHeartOutline size={17.5} />Deixar Favorito</li>
                   <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100'><IoInformationCircleOutline size={17.5} />Informações Detalhadas</li>
                   <li className='list-none flex items-center pt-3 pb-3 pl-2 pr-2 border-b border-neutral-200 gap-2 cursor-pointer transition-all duration-300 hover:bg-neutral-100' onClick={() => removeFile(currentFile.id)}><IoTrashBin size={17.5} />Deletar Arquivo</li>
                 </div>
@@ -174,7 +191,11 @@ const Files = ({ fileList, getFiles }: any) => {
                     <IoEllipsisVerticalSharp size={20} className="cursor-pointer" />
                   </div>
                   <div className='h-[200px] flex justify-center items-center p-1'>
-                    <img src={item.imageLink} alt="File Photo" className='w-full max-h-[200px] rounded-xl' />
+                    {item.fileType === "img" ? (<img src={item.imageLink} alt="File Photo" className='w-full max-h-[200px] rounded-xl' />) : (<></>)}
+                    {item.fileType === "pdf" ? (<img src={"https://png.pngtree.com/png-clipart/20220612/original/pngtree-pdf-file-icon-png-png-image_7965915.png"} alt="File Photo" className='w-full max-h-[125px] max-w-[125px] rounded-xl' />) : (<></>)}
+                    {item.fileType === "word" ? (<img src={"https://1000logos.net/wp-content/uploads/2020/08/Microsoft-Word-Logo.png"} alt="File Photo" className='w-full max-h-[150px] max-w-[150px] rounded-xl' />) : (<></>)}
+                    {item.fileType === "excel" ? (<img src={"https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Microsoft_Office_Excel_%282019%E2%80%93present%29.svg/826px-Microsoft_Office_Excel_%282019%E2%80%93present%29.svg.png"} alt="File Photo" className='w-full max-h-[90px] max-w-[90px] rounded-xl' />) : (<></>)}
+                    {item.fileType === "powerpoint" ? (<img src={"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Microsoft_Office_PowerPoint_%282019%E2%80%93present%29.svg/512px-Microsoft_Office_PowerPoint_%282019%E2%80%93present%29.svg.png?20210821050414"} alt="File Photo" className='w-full max-h-[90px] max-w-[90px] rounded-xl' />) : (<></>)}
                   </div>
                 </div>
               </>

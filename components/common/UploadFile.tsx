@@ -10,7 +10,7 @@ import { useSession } from 'next-auth/react'
 
 const UploadFile = ({ handleClick, folder }: { handleClick: () => void, folder: string }) => {
 
-  const {data: session, status} = useSession()
+  const { data: session, status } = useSession()
 
   const uploadFile = async (event: ChangeEvent<HTMLInputElement>) => {
     let file: any = event.target.files?.[0]
@@ -40,8 +40,8 @@ const UploadFile = ({ handleClick, folder }: { handleClick: () => void, folder: 
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
               addFile(downloadURL, file.name, folder, session?.user?.email)
-              handleClick()
               toast.success("Arquivo adicionado com sucesso!")
+              handleClick()
             });
           }
         )
@@ -54,16 +54,16 @@ const UploadFile = ({ handleClick, folder }: { handleClick: () => void, folder: 
   return (
     <div>
       <ToastMessage />
-      <label htmlFor="file">
-        <input type="file" name="file" id="file" onChange={(event) => uploadFile(event)} className='hidden z-40 opacity-0 absolute' />
-        <button className="cta">
+      <button className="cta">
+        <label htmlFor="file" className='flex gap-2 items-center cursor-pointer'>
           <span>Adicionar Arquivo</span>
           <svg viewBox="0 0 13 10" height="10px" width="15px">
             <path d="M1,5 L11,5"></path>
             <polyline points="8 1 12 5 8 9"></polyline>
           </svg>
-        </button>
-      </label>
+        </label>
+        <input type="file" name="file" id="file" onChange={(event) => uploadFile(event)} className='hidden z-40 opacity-0 absolute' />
+      </button>
     </div>
   )
 }

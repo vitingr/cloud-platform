@@ -23,6 +23,7 @@ const page = () => {
   const [isCreateFolderVisible, setCreateFolderVisible] = useState<boolean>(false)
   const [folderName, setFolderName] = useState<string>("")
   const [description, setDescription] = useState<string>("")
+  const [search, setSearch] = useState<string>("")
 
   const createFolder = async () => {
     if (folderName !== "" && description !== "" && session != undefined && status === "authenticated") {
@@ -37,7 +38,7 @@ const page = () => {
       addFolder(payload)
       setCreateFolderVisible(false)
       getFiles()
-      
+
       toast.success("Sucesso! A pasta foi criada.")
     }
   }
@@ -48,12 +49,13 @@ const page = () => {
     const newFileList: any = [];
 
     const queryFiles = query(files, orderBy("isFolder", "desc"))
+    console.log(search)
 
-    if (session != undefined && status === "authenticated") {
+    if (session?.user?.email != undefined && status === "authenticated") {
       onSnapshot(queryFiles, (response) => {
         response.docs.forEach((item) => {
           let value = { ...item.data() }
-          if (value.folder === "main" && value.creator === session?.user?.email) {
+          if (value.folder === "main" && value.creator === session?.user?.email && value.name.includes(search)) {
             newFileList.push({ ...item.data(), id: item.id });
           } else {
             return
@@ -64,11 +66,18 @@ const page = () => {
     }
   }
 
-  useEffect(() => {
+  const searchItem = async (value: string) => {
+    setSearch(value)
     getFiles()
-  }, [])
+  }
 
-  return (
+  useEffect(() => {
+    if (session?.user?.email != undefined && status === "authenticated") {
+      getFiles()
+    }
+  }, [session])
+
+  return session?.user?.email !== undefined ? (
     <div className='w-full flex flex-col p-[5%] max-w-[1600px]'>
       <ToastMessage />
       <div className='w-full flex justify-around'>
@@ -81,8 +90,8 @@ const page = () => {
       </div>
 
       <div className='w-full mt-8 bg-[#edf2fc] flex items-center gap-6 pt-4 pb-3 pl-6 pr-6 rounded-full'>
-        <IoSearch size={20} />
-        <input type="text" name="search" id="search" placeholder='Buscar um arquivo específico' className='w-full flex items-center outline-none bg-transparent text-neutral-500' />
+      <IoSearch size={20} />
+        <input type="text" name="search" id="search" placeholder='Buscar um arquivo específico' className='w-full flex items-center outline-none bg-transparent text-neutral-500' onChange={(e) => searchItem(e.target.value)} />
       </div>
 
       <Files fileList={fileList} getFiles={getFiles} />
@@ -113,6 +122,8 @@ const page = () => {
       )}
 
     </div>
+  ) : (
+    <></>
   )
 }
 
