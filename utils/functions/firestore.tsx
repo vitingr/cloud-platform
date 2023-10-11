@@ -57,7 +57,7 @@ export const addFolder = async (payload: {
 }) => {
   try {
     addDoc(files, {
-      folderName: payload.folderName,
+      name: payload.folderName,
       isFolder: payload.isFolder,
       FileList: payload.fileList,
       folder: payload.folder,

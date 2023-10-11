@@ -101,7 +101,7 @@ export default function Home() {
       <section className='p-[5%]'>
         <h1 className='text-3xl font-bold text-center'>Novidades</h1>
         <p className='mt-1 text-center'>Receba todas as novidades do Cloudify</p>
-        <div className='flex justify-between gap-4 w-[450px] mt-4 rounded-xl bg-white border border-[#D8DDE8] p-2'>
+        <div className='flex justify-between gap-4 w-full max-w-[450px] mt-4 rounded-xl bg-white border border-[#D8DDE8] p-2'>
           <input type="email" name='email' id='email' placeholder='Digite o seu email' className='outline-none w-full bg-transparent text-sm text-[#626B7F] pl-2' />
           <Button text="Inscrever" btnClass='bg-[#6C47FF] p-3 rounded-xl text-white text-sm text-center cursor-pointer transition-all duration-300 hover:bg-[#563cbd] w-[150px]' />
         </div>

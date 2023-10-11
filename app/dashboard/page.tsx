@@ -55,6 +55,7 @@ const page = () => {
       onSnapshot(queryFiles, (response) => {
         response.docs.forEach((item) => {
           let value = { ...item.data() }
+          console.log(value)
           if (value.folder === "main" && value.creator === session?.user?.email && value.name.includes(search)) {
             newFileList.push({ ...item.data(), id: item.id });
           } else {

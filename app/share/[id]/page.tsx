@@ -40,9 +40,9 @@ const page = () => {
   })
 
   return file.imageLink !== undefined ? (
-    <div className='flex flex-col items-center p-[1%] max-w-[900px] w-full'>
+    <div className='flex flex-col items-center p-[5%] max-w-[900px] w-full'>
       <div className='flex justify-between w-full'>
-        <div className='w-full text-sm'>{file.id}</div>
+        <div className='w-full text-sm text-neutral-400'>{file.id}</div>
         <div className='w-full flex justify-end gap-6'>
           <IoCloudDownloadSharp size={25} className="cursor-pointer" />
           <IoInformationCircleOutline size={25} className="cursor-pointer" />
@@ -50,7 +50,7 @@ const page = () => {
         </div>
       </div>
       <div className='flex flex-col items-center w-full mt-16'>
-        <img src={file.imageLink} alt="Item Photo" className='max-w-[650px] max-h-[650px] transition-all duration-300 hover:scale-105' />
+        <img src={file.imageLink} alt="Item Photo" className='max-w-[350px] max-h-[350px] sm:max-w-[650px] sm:max-h-[650px] transition-all duration-300 hover:scale-105 rounded-xl' />
       </div>
       <div className='w-full mt-16'>
         <h1 className='font-bold text-lg'>{file.name}</h1>
