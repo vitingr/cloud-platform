@@ -49,13 +49,11 @@ const page = () => {
     const newFileList: any = [];
 
     const queryFiles = query(files, orderBy("isFolder", "desc"))
-    console.log(search)
 
     if (session?.user?.email != undefined && status === "authenticated") {
       onSnapshot(queryFiles, (response) => {
         response.docs.forEach((item) => {
           let value = { ...item.data() }
-          console.log(value)
           if (value.folder === "main" && value.creator === session?.user?.email && value.name.includes(search)) {
             newFileList.push({ ...item.data(), id: item.id });
           } else {
@@ -71,6 +69,12 @@ const page = () => {
     setSearch(value)
     getFiles()
   }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if ((e.key === 'Backspace' || e.key === 'Delete') && search === '') {
+      getFiles();
+    }
+  };
 
   useEffect(() => {
     if (session?.user?.email != undefined && status === "authenticated") {
@@ -92,13 +96,13 @@ const page = () => {
 
       <div className='w-full mt-8 bg-[#edf2fc] flex items-center gap-6 pt-4 pb-3 pl-6 pr-6 rounded-full'>
       <IoSearch size={20} />
-        <input type="text" name="search" id="search" placeholder='Buscar um arquivo específico' className='w-full flex items-center outline-none bg-transparent text-neutral-500' onChange={(e) => searchItem(e.target.value)} />
+        <input type="text" name="search" id="search" placeholder='Buscar um arquivo específico' className='w-full flex items-center outline-none bg-transparent text-neutral-500' autoComplete='off' onChange={(e) => searchItem(e.target.value)} onKeyDown={(e) => handleKeyDown(e)} />
       </div>
 
       <Files fileList={fileList} getFiles={getFiles} />
 
       <div className='mt-32'>
-        <UploadFile handleClick={getFiles} folder='main' />
+        <UploadFile getFiles={getFiles} folder='main' />
       </div>
 
       {isCreateFolderVisible ? (

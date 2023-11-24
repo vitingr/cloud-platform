@@ -50,7 +50,7 @@ const page = () => {
         </div>
       </div>
       <div className='flex flex-col items-center w-full mt-16'>
-        <img src={file.imageLink} alt="Item Photo" className='max-w-[350px] max-h-[350px] sm:max-w-[650px] sm:max-h-[650px] transition-all duration-300 hover:scale-105 rounded-xl' />
+        <img src={file.imageLink} alt="Item Photo" className='max-w-[350px] max-h-[350px] sm:max-w-[650px] sm:max-h-[650px] transition-all duration-300 cursor-pointer rounded-xl' />
       </div>
       <div className='w-full mt-16'>
         <h1 className='font-bold text-lg'>{file.name}</h1>

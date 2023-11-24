@@ -8,7 +8,7 @@ import ToastMessage from '../config/ToastMessage'
 import { toast } from 'react-toastify'
 import { useSession } from 'next-auth/react'
 
-const UploadFile = ({ handleClick, folder }: { handleClick: () => void, folder: string }) => {
+const UploadFile = ({ getFiles, folder }: { getFiles: () => void, folder: string }) => {
 
   const { data: session, status } = useSession()
 
@@ -41,7 +41,8 @@ const UploadFile = ({ handleClick, folder }: { handleClick: () => void, folder: 
             getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
               addFile(downloadURL, file.name, folder, session?.user?.email)
               toast.success("Arquivo adicionado com sucesso!")
-              handleClick()
+              console.log("fetching data")
+              getFiles()
             });
           }
         )

@@ -95,7 +95,7 @@ const page = () => {
       <Files fileList={fileList} getFiles={getFiles} />
 
       <div className='mt-32'>
-        <UploadFile handleClick={getFiles} folder={idFolder} />
+        <UploadFile getFiles={getFiles} folder={idFolder} />
       </div>
 
       {

@@ -10,6 +10,12 @@ import { database } from '@/database/firebase'
 
 let users = collection(database, "users")
 
+interface userInfo {
+  name: string;
+  email: string;
+  image: string;
+}
+
 const Navbar = () => {
 
   const [user, setUser] = useState<any>([])
@@ -37,7 +43,7 @@ const Navbar = () => {
   const checkUser = async () => {
     try {
       if (user.length === 0) {
-        let userInfo: any = {
+        let userInfo: userInfo | any = {
           name: session?.user?.name,
           email: session?.user?.email,
           image: session?.user?.image

@@ -100,7 +100,7 @@ const Files = ({ fileList, getFiles }: any) => {
 
   return (
     <>
-    <ToastMessage />
+      <ToastMessage />
       <div className='flex flex-wrap justify-center gap-12 mt-24'>
         {fileList.map((item: {
           imageLink: string;
@@ -170,13 +170,13 @@ const Files = ({ fileList, getFiles }: any) => {
             )}
             <div>
               {item.isFolder ? (
-                <div className='p-2 bg-[#e2e7ec] rounded-xl w-[200px] cursor-pointer' key={item.id}>
+                <div className='p-2 bg-[#e2e7ec] rounded-xl w-[200px] cursor-pointer'>
                   <div className='h-[30px] w-full flex justify-between p-1 gap-2 overflow-hidden'>
                     <IoDocumentText size={20} />
                     <h1 className='w-full max-w-[133px] overflow-hidden'>{item.name}</h1>
                     <IoEllipsisVerticalSharp size={20} className="cursor-pointer" onClick={() => chooseFile(item)} />
                   </div>
-                  <Link href={`/dashboard/${item.id}`} key={item.id}>
+                  <Link href={`/dashboard/${item.id}`}>
                     <div className='h-[200px] flex justify-center items-center'>
                       <IoFolderSharp size={65} />
                     </div>
@@ -184,7 +184,7 @@ const Files = ({ fileList, getFiles }: any) => {
                 </div>
               ) : (
                 <>
-                  <div className='p-2 bg-[#e2e7ec] rounded-xl w-[200px] cursor-pointer' key={item.id} onClick={() => chooseFile(item)}>
+                  <div className='p-2 bg-[#e2e7ec] rounded-xl w-[200px] cursor-pointer' onClick={() => chooseFile(item)}>
                     <div className='h-[30px] w-full flex justify-between p-1 gap-2 overflow-hidden'>
                       <IoDocumentText size={20} />
                       <h1 className='w-full max-w-[133px] overflow-hidden'>{item.name}</h1>
