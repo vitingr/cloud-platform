@@ -82,9 +82,9 @@ const Navbar = () => {
       <div className='list-none gap-12 w-full justify-center hidden sm:flex sm:block'>
         <Link href={"/"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Início</li></Link>
         <Link href={"/dashboard"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Dashboard</li></Link>
-        <Link href={"/"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Recursos</li></Link>
-        <Link href={"/"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Documentação</li></Link>
-        <Link href={"/"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Sobre</li></Link>
+        <Link href={"/resources"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Recursos</li></Link>
+        <Link href={"/help"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Como funciona</li></Link>
+        <Link href={"/about"}><li className='text-[#5d636d] cursor-pointer transition-all duration-300 hover:text-[#262f40]'>Sobre</li></Link>
       </div>
 
       <div className='w-full flex justify-start'>
